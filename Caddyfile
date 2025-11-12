@@ -1,0 +1,9 @@
+{
+	local_certs
+}
+
+dossier.example {
+	tls internal
+	root * ./examples
+	file_server
+}

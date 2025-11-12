@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang=en-ca>
+<meta name=color-scheme content="light dark">
+<title>Tabs custom element</title>
+<script src=/tabs.bundled.js></script>
+<link rel=stylesheet href=/main.css>
+<main>
+	<h1><code>&lttabs-></code> custom element</h1>
+	<p>A set of tabbed interface custom elements.</p>
+	<ul>
+		<li>Includes four elements: <a href=#element-tabs><code>&lttabs-></code></a>, <a href=#element-tablist><code>&lttablist-></code></a>, <a href=#element-tab><code>&lttab-></code></a>, and <a href=#element-tabpanel><code>&lttabpanel-></code></a>. Yes, you can rename them.
+		<li>Not need to slot yourself (i.e. using the <code>slot</code> attribute)
+		<li>Bring your own styles, because these don’t have any.
+		<li>Elements have implicit ARIA semantics.
+		<li>Supports horizontal and vertical orientations.
+		<li>Supports various activation types. 
+		<li>Searchable tab panel content (opt-in).
+	</ul>
+
+	<h2 id=elements>Elements</h2>
+	<tabs- labelledby=elements searchable>
+		<style>
+			@scope {
+				:scope:defined {
+					display: grid;
+				}
+
+				tab-:defined {
+					display: inline-block;
+					font-size: 1.25rem;
+					text-align: center;
+					transition: background-color 200ms ease-in-out, border-color 200ms ease-in-out;
+					border-block-end: 6px solid transparent;
+
+					> code {
+						background-color: transparent;
+						font-variant-ligatures: no-common-ligatures;
+					}
+
+					&:state(selected) {
+						background-color: hsl(from Canvas h s calc(l * 2.5));
+						border-block-end-color: CanvasText;
+					}
+
+					&:hover {
+						background-color: hsl(from Canvas h s calc(l * 3));
+					}
+
+					&:active {
+						background-color: hsl(from Canvas h s calc(l * 2.4));
+					}
+				}
+
+				tabpanel-:defined:state(selected) {
+					padding: 16px;
+
+					code {
+						font-variant-ligatures: no-common-ligatures;
+					}
+				}
+
+				a[href^="#element-tab"] > code {
+					white-space: nowrap;
+				}
+
+				dl {
+					margin-block: 0;
+					scroll-margin-top: 90px;
+					max-inline-size: 64ch;
+				}
+
+				dt + dd {
+					margin-block: 1em;
+
+					ul {
+						padding-inline-start: 1em;
+					}
+
+					li {
+						margin-block: 0.75em;
+					}
+				}
+				:scope:defined::part(tablist) {
+					background-color: hsl(from Canvas h s calc(l * 1.6));
+					position: sticky;
+					z-index: 2;
+					inset-block-start: 0;
+					border-block-end-width: 1px;
+				}
+			}
+		</style>
+
+		<tab-><code>&lttabs-></code></tab->
+		<tabpanel->
+			<dl id=element-tabs tabindex=-1>
+				<dt>Permitted parents</dt>
+				<dd>TODO: any, but determine some constraints.</dd>
+				<dt>Permitted content</dt>
+				<dd>
+					<p>Either:
+					<ul>
+						<li>one <a href=#element-tablist><code>&lttablist-></code></a> element and multiple <a href=#element-tabpanel><code>&lttabpanel-></code></a> elements</li>
+						<li>multiple <a href=#element-tab><code>&lttab-></code></a> and multiple corresponding <a href=#element-tabpanel><code>&lttabpanel-></code></a> elements. In this case the <a href=#element-tablist><code>&lttablist-></code></a> element is implied.</li>
+					</ul>
+					<p>All other content will be ignored.
+				</dd>
+				<dt>Attributes</dt>
+				<dd>
+					<ul>
+						<li><code>labelledby</code> <i>MUST</i> be used for setting the label of the tablist when it is not provided. This takes a list of element IDs. When an explicit tab list is used, you can either use this attribute or use <code>aria-labelledby</code> or <code>aria-label</code> on that element itself.</li>
+						<li><code>orientation</code> which takes the values
+							<code>horizontal</code> (default) or <code>vertical</code>. Can be set or retrieved in the DOM using the <code>orientation</code> property.</li>
+						<li><code>selectfollowsfocus</code> which is a boolean attribute (takes no value and is based on prescence). Can be set or retrieved in the DOM using the <code>selectFollowsFocus</code> property.</li>
+					</ul>
+				</dd>
+				<dt>Implicit ARIA role and properties</dt>
+				<dd>None set (as of writing custom elements will default to <code>generic</code>, however, this is likely changing to <code>none</code>)</dd>
+				<dt>ARIA role, states, and property allowances</dt>
+				<dd>When defined, it’s not advisable for an author to use any ARIA role or property on this element. For the love of god, do not use <code>aria-labelledby</code> or <code>aria-label</code> expecting it to label the thing, instead use the <code>labelledby</code> attribute on this element or <code>aria-labelledby</code> on the tab list element itself.</dd>
+				<dt>Styling</dt>
+				<dd>When an explicit tab list element is not used, the implied tab list
+					element can be styled using the <code>tablist</code> CSS shadow part
+					(i.e.&nbsp;<code>::part(tablist)</code>).</dd>
+			</dl>
+		</tabpanel->
+
+		<tab-><code>&lttablist-></code></tab->
+		<tabpanel->
+			<dl id=element-tablist tabindex=-1>
+				<dt>Permitted parents</dt>
+				<dd><a href=#element-tabs><code>&lttabs-></code></a></dd>
+				<dt>Permitted content</dt>
+				<dd>
+					Only <a href=#element-tab><code>&lttab-></code></a> elements.
+				</dd>
+				<dt>Attributes</dt>
+				<dd>There are no attributes defined for this element.</dd>
+				<dt>Implicit ARIA role and properties</dt>
+				<dd><code>role=tablist</code> and <code>aria-orientation</code> is mapped to the <code>orientation</code> attribute of the parent <a href=#element-tabs><code>&lttabs-></code></a> element (detaults to <code>horizontal</code> when not set).</dd>
+				<dt>Styling</dt>
+				<dd>The <code>:state(vertical)</code> or <code>:state(horizontal)</code> CSS state pseudo-classes can be used to style the element depending on its orientation.</dd>
+			</dl>
+		</tabpanel->
+
+		<tab- selected><code>&lttab-></code></tab->
+		<tabpanel->
+			<dl id=element-tab tabindex=-1>
+				<dt>Permitted parents</dt>
+				<dd><a href=#element-tabs><code>&lttabs-></code></a> or <a href=#element-tablist><code>&lttablist-></code></a></dd>
+				<dt>Permitted content</dt>
+				<dd>Any non-interactive content.</dd>
+				<dt>Attributes</dt>
+				<dd>TODO: add a <code>selected</code> attribute.</dd>
+				<dt>Implicit ARIA role and properties</dt>
+				<dd><code>role=tab</code>, <code>aria-selected</code> for the selected state, and <code>aria-controls</code> for the associated tab panel.</dd>
+				<dt>Styling</dt>
+				<dd>The <code>:state(selected)</code> CSS state pseudo-class can be used to style the element when selected.</dd>
+			</dl>
+		</tabpanel->
+
+		<tab-><code>&lttabpanel-></code></tab->
+		<tabpanel->
+			<dl id=element-tabpanel tabindex=-1>
+				<dt>Permitted parents</dt>
+				<dd><a href=#element-tabs><code>&lttabs-></code></a></dd>
+				<dt>Permitted content</dt>
+				<dd>Any content.</dd>
+				<dt>Attributes</dt>
+				<dd>There are no attributes defined for this element.</dd>
+				<dt>Implicit ARIA role and properties</dt>
+				<dd><code>role=tabpanel</code> and <code>aria-labelledby</code> for the associated tab.</dd>
+				<dt>Styling</dt>
+				<dd>The <code>:state(selected)</code> CSS state pseudo-class can be used to style the element when selected.</dd>
+			</dl>
+		</tabpanel->
+
+	</tabs->
+
+	<h2 id=examples>Examples</h2>
+	<h3 id=example-default>Default</h3>
+	<tabs- labelledby=example-default>
+		<tab->Tab A</tab->
+		<tabpanel->Panel A</tabpanel->
+		<tab->Tab B</tab->
+		<tabpanel->Panel B</tabpanel->
+		<tab->Tab C</tab->
+		<tabpanel->Panel C</tabpanel->
+		<tab->Tab D</tab->
+		<tabpanel->Panel D</tabpanel->
+	</tabs->
+	<h3 id=example-vertical>Vertical</h3>
+	<p>Set the <code>orientation=vertical</code> attribute-value pair on the <code>&lttabs-></code> element to make the tab navigation orientation be vertical.</p>
+	<tabs- labelledby=example-vertical orientation=vertical>
+		<tab->Tab A</tab->
+		<tabpanel->Panel A</tabpanel->
+		<tab->Tab B</tab->
+		<tabpanel->Panel B</tabpanel->
+		<tab->Tab C</tab->
+		<tabpanel->Panel C (with searchable content and <a id=deeplink>deeplinkable</a> content)</tabpanel->
+		<tab->Tab D</tab->
+		<tabpanel->Panel D</tabpanel->
+	</tabs->
+	<h3 id=example-selectfollowsfocus>Select follows focus</h3>
+	<p>Set the <code>selectfollowsfocus</code> boolean attribute on the <code>&lttabs-></code> element to have the tab selection follow the focus.</p>
+	<tabs- labelledby=example-selectfollowsfocus selectfollowsfocus>
+		<tab->Tab A</tab->
+		<tabpanel->Panel A</tabpanel->
+		<tab->Tab B</tab->
+		<tabpanel->Panel B</tabpanel->
+		<tab->Tab C</tab->
+		<tabpanel->Panel C</tabpanel->
+		<tab->Tab D</tab->
+		<tabpanel->Panel D</tabpanel->
+	</tabs->
+
+	<h3 id=example-explicit-tablist>With explicit tablist element</h3>
+	<p>Wrap the <code>&lttab-></code> elements with a <code>&lttablist-></code> element for more control that element.</p>
+	<tabs->
+		<tablist- aria-labelledby=example-explicit-tablist>
+			<tab->Tab A</tab->
+			<tab->Tab B</tab->
+			<tab->Tab C</tab->
+			<tab->Tab D</tab->
+		</tablist->
+		<tabpanel->Panel A</tabpanel->
+		<tabpanel->Panel B</tabpanel->
+		<tabpanel->Panel C</tabpanel->
+		<tabpanel->Panel D</tabpanel->
+	</tabs->
+</main>

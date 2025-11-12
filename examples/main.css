@@ -1,0 +1,89 @@
+:root {
+	font-family: system-ui;
+	font-feature-settings: "ss06";
+	color-scheme: light dark;
+	line-height: 1.5;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+code {
+	font-family: "Dank Mono", monospace;
+	background-color: hsl(from Canvas h s calc(l * 2));
+	padding-inline: 4px;
+	padding-block: 4px;
+	border-radius: 4px;
+}
+
+body {
+	margin: 24px;
+}
+
+h1 > code {
+	font-style: italic;
+	font-variant-ligatures: initial;
+}
+
+code {
+	font-variant-ligatures: no-common-ligatures;
+}
+
+dt {
+	font-weight: 600;
+}
+
+tabs-:defined {
+	display: inline-grid;
+	border: 2px solid hsl(from CanvasText h s calc(l * 0.7));
+	border-radius: 4px;
+
+	&[orientation="vertical"] {
+		grid-template-columns: [tabs-start] auto [tabs-end panels-start] minmax(300px, 1fr) [panels-end];
+	}
+}
+
+tablist-:defined,
+::part(tablist) {
+	display: inline-grid;
+	border-width: 0px;
+	border-color: hsl(from CanvasText h s calc(l * 0.7));
+	border-style: solid;
+}
+
+tablist-:defined:state(horizontal),
+::part(tablist):state(horizontal) {
+	grid-auto-flow: column;
+	border-block-end-width: 2px;
+}
+
+tablist-:defined:state(vertical),
+::part(tablist):state(vertical) {
+	border-inline-end-width: 2px;
+}
+
+tabpanel-:defined:is([orientation="vertical"] *) {
+	grid-column: panels;
+	grid-row: 1;
+}
+
+tabpanel-:defined:not([hidden=""]) {
+	display: block;
+	&:state(selected) {
+		z-index: 1;
+	}
+}
+
+tab-:defined,
+tabpanel-:defined:state(selected) {
+	padding: 8px;
+}
+
+tab-:defined {
+	font-weight: 500;
+	cursor: default;
+	&:state(selected) {
+		color: DeepPink;
+	}
+}
