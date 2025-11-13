@@ -15,10 +15,11 @@ export class TabPanelElement extends ContextConsumer(BaseElement) {
 	constructor() {
 		super();
 		this.addEventListener("beforematch", this);
+		this.addEventListener("focus", this);
 	}
 
 	handleEvent(event) {
-		if (event.type === "beforematch")
+		if (event.type === "beforematch" || (event.type === "focus" && this.hidden))
 			this.dispatchEvent(new TabPanelFoundEvent);
 		else if (event.type === "hashchange") {
 			const target = document.querySelector(":target");
@@ -58,8 +59,7 @@ export class TabPanelElement extends ContextConsumer(BaseElement) {
 		this.hidden = selected ? false : this.#searchable ? "until-found" : true;
 		this.#internals.ariaHidden = selected ? "false" : "true";
 		this.#internals.states[selected ? "add" : "delete"]("selected");
-		if (selected) this.tabIndex = 0;
-		else this.removeAttribute("tabindex");
+		this.tabIndex = selected ? 0 : -1;
 	}
 }
 
