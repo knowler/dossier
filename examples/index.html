@@ -3,7 +3,13 @@
 <meta name=color-scheme content="light dark">
 <title>Tabs custom element</title>
 <script src=tabs.bundled.js></script>
-<link rel=stylesheet href=main.css>
+<!--<link rel=stylesheet href=main.css>-->
+<style>
+	:root {
+		font-family: system-ui;
+	}
+</style>
+<link rel=stylesheet href=tabs.css>
 <main>
 	<h1><code>&lttabs-></code> custom element</h1>
 	<p>A set of tabbed interface custom elements.</p>
@@ -19,6 +25,17 @@
 
 	<h2 id=elements>Elements</h2>
 	<tabs- labelledby=elements searchable>
+		<template shadowrootmode="open">
+			<!-- No-JS fallback -->
+			<h3><slot name=tabs-heading></slot></h3>
+			<div><slot name=tabs-content></slot></div>
+			<h3><slot name=tablist-heading></slot></h3>
+			<div><slot name=tablist-content></slot></div>
+			<h3><slot name=tab-heading></slot></h3>
+			<div><slot name=tab-content></slot></div>
+			<h3><slot name=tabpanel-heading></slot></h3>
+			<div><slot name=tabpanel-content></slot></div>
+		</template>
 		<style>
 			@scope {
 				:scope:defined {
@@ -90,8 +107,8 @@
 			}
 		</style>
 
-		<tab-><code>&lttabs-></code></tab->
-		<tabpanel- id=element-tabs>
+		<tab- slot=tabs-heading><code>&lttabs-></code></tab->
+		<tabpanel- id=element-tabs slot=tabs-content>
 			<dl>
 				<dt>Permitted parents</dt>
 				<dd>TODO: any, but determine some constraints.</dd>
@@ -124,8 +141,8 @@
 			</dl>
 		</tabpanel->
 
-		<tab-><code>&lttablist-></code></tab->
-		<tabpanel- id=element-tablist>
+		<tab- slot=tablist-heading><code>&lttablist-></code></tab->
+		<tabpanel- id=element-tablist slot=tablist-content>
 			<dl>
 				<dt>Permitted parents</dt>
 				<dd><a href=#element-tabs><code>&lttabs-></code></a></dd>
@@ -142,8 +159,8 @@
 			</dl>
 		</tabpanel->
 
-		<tab- selected><code>&lttab-></code></tab->
-		<tabpanel- id=element-tab>
+		<tab- slot=tab-heading><code>&lttab-></code></tab->
+		<tabpanel- id=element-tab slot=tab-content>
 			<dl>
 				<dt>Permitted parents</dt>
 				<dd><a href=#element-tabs><code>&lttabs-></code></a> or <a href=#element-tablist><code>&lttablist-></code></a></dd>
@@ -158,8 +175,8 @@
 			</dl>
 		</tabpanel->
 
-		<tab-><code>&lttabpanel-></code></tab->
-		<tabpanel- id=element-tabpanel>
+		<tab- slot=tabpanel-heading><code>&lttabpanel-></code></tab->
+		<tabpanel- id=element-tabpanel slot=tabpanel-content>
 			<dl>
 				<dt>Permitted parents</dt>
 				<dd><a href=#element-tabs><code>&lttabs-></code></a></dd>

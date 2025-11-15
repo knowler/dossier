@@ -15,29 +15,17 @@ export class TabPanelElement extends ContextConsumer(BaseElement) {
 	constructor() {
 		super();
 		this.addEventListener("beforematch", this);
-		this.addEventListener("focus", this);
 	}
 
 	handleEvent(event) {
-		if (event.type === "beforematch" || (event.type === "focus" && this.hidden))
+		if (event.type === "beforematch")
 			this.dispatchEvent(new TabPanelFoundEvent);
-		else if (event.type === "hashchange") {
-			const target = document.querySelector(":target");
-			if (!this.contains(target)) return;
-			this.dispatchEvent(new TabPanelFoundEvent);
-			target.focus();
-		}
 	}
 
 	connectedCallback() {
 		this.addContextListener("associations", this.#handleAssociationsChange.bind(this), true);
 		this.addContextListener("selected", this.#handleSelectedChange.bind(this), true);
 		this.addContextListener("searchable", this.#handleSearchableChange.bind(this), true);
-		window.addEventListener("hashchange", this);
-	}
-
-	disconnectedCallback() {
-		window.removeEventListener("hashchange", this);
 	}
 
 	#handleSearchableChange(searchable) {

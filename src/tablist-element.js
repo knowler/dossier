@@ -2,7 +2,7 @@ import { BaseElement, html } from "./base-element.js"
 import { RovingTabIndex } from "./roving-tabindex-mixin.js";
 import { ContextConsumer } from "./context-protocol.js";
 
-// TODO: handle when focus leaves, it should go back to the selected item.
+// TODO: handle when focus leaves, should it go back to the selected item?
 /**
  * Tab list element
  */
@@ -41,7 +41,6 @@ export class TabListElement extends ContextConsumer(RovingTabIndex(BaseElement))
 	}
 
 	#handleLabelledByChange(elements) {
-		console.log(elements);
 		this.#internals.ariaLabelledByElements = elements;
 	}
 }
