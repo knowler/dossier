@@ -1,0 +1,104 @@
+tabs-:defined {
+	display: inline-grid; 
+	--base: from Canvas h s;
+	border: 1px solid light-dark(
+		hsl(var(--base) calc(l * 0.95)),
+		hsl(var(--base) calc(l * 3.75))
+	);
+	border-radius: 3px;
+	inline-size: min(100%, 40rem);
+
+	&:where([orientation="vertical"]) {
+		grid-template-columns: auto 1fr;
+	}
+}
+
+tablist-:defined,
+::part(tablist) {
+	display: inline-grid;
+	justify-content: start;
+	position: relative;
+}
+
+tablist-:defined:state(horizontal),
+::part(tablist):state(horizontal) {
+	overflow-x: auto;
+	grid-auto-flow: column;
+}
+
+
+::part(tablist)::before {
+	content: "";
+	position: absolute;
+	block-size: 1px;
+	inset-block-end: 0;
+	inset-inline: 0;
+	z-index: 1;
+	background-color: light-dark(
+		hsl(var(--base) calc(l * 0.95)),
+		hsl(var(--base) calc(l * 4))
+	);
+}
+
+tablist-:defined:state(vertical)::before,
+::part(tablist):state(vertical)::before {
+	block-size: 100%;
+	inline-size: 1px;
+	inset-block: 0;
+	inset-inline: auto 0;
+}
+
+tab-:defined {
+	display: inline-block;
+	padding-inline: 8px;
+	padding-block: 8px 12px;
+	cursor: pointer;
+	font-weight: 600;
+	position: relative;
+	transition: border-block-end-color 200ms ease-in-out, background-color 200ms ease-in-out;
+
+	&:hover {
+		background-color: light-dark(
+			hsl(var(--base) calc(l * 0.975)),
+			hsl(var(--base) calc(l * 1.5))
+		);
+	}
+
+	&:state(selected) {
+		background-color: light-dark(
+			hsl(var(--base) calc(l * 0.95)),
+			hsl(var(--base) calc(l * 1.75))
+		);
+	}
+}
+
+tab-:defined::after {
+	content: "";
+	position: absolute;
+	block-size: 4px;
+	inset-block-end: 0;
+	inset-inline: 0;
+	z-index: 2;
+	transition: background-color 200ms ease-in-out;
+}
+
+tab-:defined:where(tabs-[orientation="vertical"] tab-) {
+	padding-inline: 8px 12px;
+	padding-block: 8px;
+}
+
+tab-:defined:where(tabs-[orientation="vertical"] tab-)::after {
+	block-size: 0;
+	inset-inline: auto 0;
+	inset-block: 0;
+	inline-size: 4px;
+	block-size: 100%;
+}
+
+tab-:defined:state(selected)::after {
+	background-color: DeepPink;
+}
+
+tabpanel-:defined {
+	padding: 8px;
+}
